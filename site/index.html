@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Questionnaire AI - Live Demo</title>
+<meta name="description" content="Cited answers to security questionnaires. Runs fully in your browser. By Nikhil Chary Sriramoju.">
+<style>
+:root{--bg:#0f1115;--fg:#e8eaf0;--mut:#8a90a2;--card:#181b22;--acc:#6ea8fe;--ok:#4cc38a;--warn:#f0b429}
+@media(prefers-color-scheme:light){:root{--bg:#f6f7fa;--fg:#14161c;--mut:#5b6172;--card:#fff}}
+*{box-sizing:border-box}body{margin:auto;max-width:980px;padding:16px;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+.card{background:var(--card);border-radius:12px;padding:14px;margin:12px 0}textarea{width:100%;height:150px;font:13px ui-monospace,monospace;background:transparent;color:inherit;border:1px solid #8885;border-radius:8px;padding:8px}
+button{background:var(--acc);color:#000;border:0;border-radius:8px;padding:9px 14px;font:inherit;cursor:pointer;margin-right:6px}
+.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #8883;text-align:left;vertical-align:top}
+.pass{color:var(--ok)}.escalate{color:var(--warn)}small,footer{color:var(--mut)}footer{text-align:center;margin:24px 0;font-size:13px}a{color:var(--acc)}
+</style></head><body>
+<h1>Questionnaire AI</h1>
+<small>Live demo. Everything runs in your browser; nothing is uploaded. The full backend lives in the repo.</small>
+<div class="card"><b>1. Your policy text</b> (paragraphs separated by blank lines)<textarea id="pol"></textarea></div>
+<div class="card"><b>2. Questions</b> (one per line)<textarea id="qs"></textarea><p><button onclick="go()">Draft answers</button><button onclick="csv()">Download CSV</button></p></div>
+<div class="card" id="res" hidden><div id="sum"></div><div class="wrap"><table id="t"></table></div></div>
+<footer>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b><br>
+<a href="https://github.com/Nikhil-creat">GitHub</a> · <a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a">LinkedIn</a></footer>
+<script>
+const $=id=>document.getElementById(id);
+$('pol').value=`All customer data is encrypted at rest using AES-256 and in transit using TLS 1.2 or higher.
+
+Access to production systems requires single sign-on with multi-factor authentication. Access reviews are performed quarterly.
+
+Customer data is retained for the duration of the contract and deleted within 30 days of termination upon request.
+
+Employees complete security awareness training at onboarding and annually thereafter.
+
+Backups are taken daily and stored in a separate region. Restore tests are performed twice a year.`;
+$('qs').value=`Do you encrypt customer data at rest?
+Is multi-factor authentication required for production access?
+How long do you retain customer data after contract termination?
+How often are backups performed and tested?
+Describe your breach notification process.
+Do you operate a quantum datacenter on the moon?`;
+const STOP=new Set("the a an of to and or in on for is are do does you your we our with be by as at it this that".split(" "));
+const SENS=/breach|incident|certif|soc ?2 type|iso ?27001|legal|liabil|indemn|insurance/i;
+const tok=t=>(t.toLowerCase().match(/[a-z0-9\-]+/g)||[]).filter(w=>!STOP.has(w));
+function chunk(text,size=600){const o=[];let b="";for(const p of text.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean)){if(b&&b.length+p.length>size){o.push(b);b=p}else b=(b+"\n"+p).trim()}if(b)o.push(b);return o}
+function search(ch,q,k=3){const qt=new Set(tok(q)),n=ch.length+1,df={};ch.forEach(c=>new Set(c.toks).forEach(t=>df[t]=(df[t]||0)+1));
+ return ch.map(c=>{const tf={};c.toks.forEach(t=>tf[t]=(tf[t]||0)+1);let s=0;qt.forEach(t=>{if(tf[t])s+=(1+Math.log(tf[t]))*Math.log(1+n/df[t])});return{...c,s}}).filter(c=>c.s>0).sort((a,b)=>b.s-a.s).slice(0,k)}
+function answer(ch,q){const h=search(ch,q);if(!h.length)return{q,a:"Insufficient evidence",c:"",v:"escalate",conf:0,why:"no supporting evidence"};
+ const qt=new Set(tok(q)),sc=s=>tok(s).filter(t=>qt.has(t)).length;
+ const a=h[0].text.split(/(?<=[.!?])\s+/).sort((x,y)=>sc(y)-sc(x)).slice(0,2).join(" ");
+ const src=new Set(h[0].toks),at=tok(a),sup=at.length?Math.round(100*at.filter(t=>src.has(t)).length/at.length)/100:0;
+ if(SENS.test(q))return{q,a,c:h[0].id,v:"escalate",conf:sup,why:"sensitive topic: security owner must approve"};
+ return{q,a,c:h[0].id,v:sup>=.6?"pass":"escalate",conf:sup,why:sup>=.6?"supported by sources":"weak support"}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let rows=[];
+function go(){const ch=chunk($('pol').value).map((t,i)=>({id:"policy#"+(i+1),text:t,toks:tok(t)}));
+ rows=$('qs').value.split("\n").map(s=>s.trim()).filter(Boolean).map(q=>answer(ch,q));
+ const p=rows.filter(r=>r.v==="pass").length;$('res').hidden=false;$('sum').textContent=`${rows.length} questions: ${p} auto-passed, ${rows.length-p} need review`;
+ $('t').innerHTML='<tr><th>Question</th><th>Answer</th><th>Status</th></tr>'+rows.map(r=>`<tr><td>${esc(r.q)}</td><td>${esc(r.a)}<br><small>${esc(r.c)}</small></td><td class="${r.v}">${r.v} (${r.conf})<br><small>${esc(r.why)}</small></td></tr>`).join('')}
+function csv(){const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
+ const t=["question,answer,citation,verdict,confidence"].concat(rows.map(r=>[r.q,r.a,r.c,r.v,r.conf].map(q).join(","))).join("\n");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="answers.csv";a.click()}
+</script></body></html>

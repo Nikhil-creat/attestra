@@ -1,0 +1,6 @@
+[
+  {"q": "Do you encrypt customer data at rest?", "must": "AES-256"},
+  {"q": "Is multi-factor authentication required for production access?", "must": "multi-factor"},
+  {"q": "How long do you retain customer data after contract termination?", "must": "30 days"},
+  {"q": "How often are backups performed?", "must": "daily"}
+]

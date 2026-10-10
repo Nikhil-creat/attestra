@@ -1,0 +1,36 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Questionnaire AI</title>
+<style>
+:root{--bg:#0f1115;--fg:#e8eaf0;--mut:#8a90a2;--card:#181b22;--acc:#6ea8fe;--ok:#4cc38a;--warn:#f0b429}
+@media(prefers-color-scheme:light){:root{--bg:#f6f7fa;--fg:#14161c;--mut:#5b6172;--card:#fff}}
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg);padding:16px;max-width:980px;margin:auto}
+h1{margin:8px 0}.card{background:var(--card);border-radius:12px;padding:14px;margin:12px 0}
+button,input{font:inherit}button{background:var(--acc);color:#000;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
+.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #8883;text-align:left;vertical-align:top}
+.pass{color:var(--ok)}.escalate{color:var(--warn)}footer{color:var(--mut);text-align:center;margin:24px 0;font-size:13px}a{color:var(--acc)}
+</style></head><body>
+<h1>Questionnaire AI</h1><div style="color:var(--mut)">Cited answers, checked by a critic, approved by you.</div>
+<div class="card"><b>1. Upload policies</b> (pdf, docx, txt, md)<br><input type="file" id="docs" multiple> <button onclick="up()">Upload</button> <span id="m1"></span></div>
+<div class="card"><b>2. Upload questionnaire</b> (xlsx)<br><input type="file" id="q"> <button onclick="run()">Draft answers</button> <span id="m2"></span></div>
+<div class="card" id="res" hidden><div id="sum"></div><div class="wrap"><table id="t"></table></div><p><button onclick="exp()">Export XLSX</button></p></div>
+<footer>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b><br>
+<a href="https://github.com/Nikhil-creat">GitHub</a> · <a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a">LinkedIn</a></footer>
+<script>
+let rid=null;const $=id=>document.getElementById(id);
+async function up(){let n=0;for(const f of $('docs').files){const d=new FormData();d.append('file',f);
+ const r=await fetch('/api/documents',{method:'POST',body:d});if(r.ok)n++;}$('m1').textContent=n+' uploaded'}
+async function run(){const d=new FormData();d.append('file',$('q').files[0]);$('m2').textContent='working...';
+ const r=await fetch('/api/questionnaires',{method:'POST',body:d});const j=await r.json();
+ if(!r.ok){$('m2').textContent=j.detail;return}$('m2').textContent='done';rid=j.id;show(j)}
+function show(j){$('res').hidden=false;const s=j.summary;
+ $('sum').textContent=`${s.total} questions: ${s.auto_passed} auto-passed, ${s.escalated} need review`;
+ $('t').innerHTML='<tr><th>Question</th><th>Answer</th><th>Status</th><th></th></tr>'+j.items.map((i,n)=>
+ `<tr><td>${esc(i.question)}</td><td>${esc(i.answer)}<br><small>${esc(i.citations.join(', '))}</small></td>
+ <td class="${i.verdict}">${i.verdict} (${i.confidence})<br><small>${esc(i.reason)}</small><br>${i.status}</td>
+ <td><button onclick="ap(${n})">Approve</button></td></tr>`).join('')}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function ap(n){await fetch(`/api/questionnaires/${rid}/items/${n}/approve`,{method:'POST'});
+ show(await (await fetch('/api/questionnaires/'+rid)).json())}
+function exp(){location='/api/questionnaires/'+rid+'/export'}
+</script></body></html>

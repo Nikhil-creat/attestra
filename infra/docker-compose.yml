@@ -1,0 +1,15 @@
+services:
+  api:
+    build: ../apps/api
+    env_file:
+      - path: ../.env
+        required: false
+    ports: ["8000:8000"]
+  postgres:            # production path: docker compose --profile prod up
+    profiles: [prod]
+    image: pgvector/pgvector:pg16
+    environment: {POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres, POSTGRES_DB: qai}
+    volumes: ["../apps/api/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql"]
+  redis:
+    profiles: [prod]
+    image: redis:7
