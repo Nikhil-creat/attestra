@@ -1,4 +1,6 @@
-# Questionnaire AI
+<p align="center"><img src="site/assets/logo.svg" width="110" alt="Attestra logo"></p>
+
+# Attestra
 
 AI agents that draft **cited** answers to customer security questionnaires (SOC 2, SIG, custom spreadsheets) from your own
 policies. A critic checks every answer against its sources, anything weak or sensitive goes to a human, and approved

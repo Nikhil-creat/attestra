@@ -1,4 +1,4 @@
-"""Questionnaire AI - API. Designed and developed by NIKHIL CHARY SRIRAMOJU."""
+"""Attestra - API. Designed and developed by NIKHIL CHARY SRIRAMOJU."""
 import io, os, time, uuid, hmac, collections
 from fastapi import FastAPI, UploadFile, File, Header, HTTPException
 from fastapi.responses import Response, JSONResponse
@@ -11,7 +11,7 @@ from core import Index, answer_question, parse_questions, export_xlsx, stale_doc
 
 AUTHOR = {"name": "NIKHIL CHARY SRIRAMOJU", "github": "https://github.com/Nikhil-creat",
           "linkedin": "https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"}
-app = FastAPI(title="Questionnaire AI", version="1.0.0",
+app = FastAPI(title="Attestra", version="1.0.0",
               description="Cited AI answers for security questionnaires. Designed and developed by NIKHIL CHARY SRIRAMOJU.")
 HITS = collections.defaultdict(list)
 

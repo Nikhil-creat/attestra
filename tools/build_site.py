@@ -2,13 +2,14 @@
 Designed and developed by NIKHIL CHARY SRIRAMOJU."""
 import os, json
 BASE = "https://nikhil-creat.github.io/questionnaire-ai/"
-BRAND = "Questionnaire AI"
+BRAND = "Attestra"
 EMAIL = "sriramojunikhil66@gmail.com"
 GH = "https://github.com/Nikhil-creat"
 LI = "https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"
 REPO = GH + "/questionnaire-ai"
 UPDATED = "October 11, 2026"
 OUT = os.path.join(os.path.dirname(__file__), "..", "site")
+SYMBOL = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="lg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><path d="M32 4 56 18v28L32 60 8 46V18Z" fill="none" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/><path d="M32 13 48.5 22.5v19L32 51 15.5 41.5v-19Z" fill="url(#g)" opacity=".16"/><path d="M20 33.5l8.5 8.5L45 22" fill="none" stroke="url(#g)" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="4" r="2.6" fill="#22d3ee"/><circle cx="56" cy="46" r="2.6" fill="#8b5cf6"/><circle cx="8" cy="46" r="2.6" fill="#22d3ee"/><circle cx="45" cy="22" r="2.2" fill="#fff"/></symbol></svg>'
 EXTRA = ""
 if os.path.exists(os.path.join(OUT, "og.png")):
     EXTRA = f'<meta property="og:image" content="{BASE}og.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">'
@@ -44,6 +45,25 @@ footer{border-top:1px solid var(--line);background:var(--bg2);margin-top:30px;pa
 footer h4{margin:0 0 10px;font-size:14px}footer a{display:block;color:var(--mut);text-decoration:none;margin:6px 0;font-size:14px}footer a:hover{color:var(--fg)}
 .cr{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;color:var(--mut);font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 label{display:block;margin:12px 0 4px;font-size:14px;color:var(--mut)}input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);font:inherit}textarea{min-height:120px}pre{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px;overflow-x:auto;font-size:13px}code{font-family:ui-monospace,monospace}.big{font-size:22px;color:var(--fg)}
+:root{--acc:#22d3ee;--acc2:#8b5cf6;--btn:linear-gradient(135deg,#22d3ee,#8b5cf6);--btnfg:#05101c}
+@media(prefers-color-scheme:light){:root{--acc:#0e7490;--acc2:#6d28d9;--btn:linear-gradient(135deg,#0e7490,#6d28d9);--btnfg:#fff}}
+.logo{width:28px;height:28px;filter:drop-shadow(0 0 6px #22d3ee66)}
+.btn{transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px #22d3ee40}
+.card{transition:transform .2s,border-color .2s;backdrop-filter:blur(6px)}.card:hover{transform:translateY(-3px);border-color:var(--acc)}
+.grad{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero{position:relative;overflow:hidden;padding:72px 0 28px;background:radial-gradient(60% 50% at 50% 0,#22d3ee22,transparent),radial-gradient(40% 40% at 85% 20%,#8b5cf622,transparent)}
+.hero:before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(70% 70% at 50% 30%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 30%,#000,transparent)}
+#fx{position:absolute;inset:0;width:100%;height:100%}.hero-in{position:relative}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--acc2);margin-right:6px;box-shadow:0 0 10px var(--acc);animation:pl 2s infinite}
+@keyframes pl{50%{opacity:.35}}
+.term{max-width:620px;margin:32px auto 0;text-align:left;background:#05080dd9;color:#cfe9f1;border:1px solid var(--line);border-radius:14px;padding:0 16px 14px;font:13px/1.9 ui-monospace,Menlo,monospace;box-shadow:0 0 40px #22d3ee22}
+.term .bar{display:flex;gap:6px;align-items:center;padding:10px 0;color:#7c8aa0;font-size:12px}.term .bar i{width:10px;height:10px;border-radius:50%;background:#ffffff30}.term .bar span{margin-left:auto}
+.ln{opacity:0;transform:translateY(4px);animation:rv .4s forwards;animation-delay:var(--d)}.ln b{color:var(--acc)}.ln.ok{color:#7ee0b5}.ln.wn{color:#f0b429}
+@keyframes rv{to{opacity:1;transform:none}}
+.built{font-size:13px;margin-top:18px}.pipe{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{padding:8px 14px;border:1px solid var(--line);border-radius:99px;background:var(--bg2);font-size:14px;animation:gl 4.8s infinite;animation-delay:calc(var(--i)*.8s)}
+@keyframes gl{0%,16%,100%{border-color:var(--line);box-shadow:none}6%{border-color:var(--acc);box-shadow:0 0 16px #22d3ee55}}
+@media(prefers-reduced-motion:reduce){.ln{opacity:1;transform:none;animation:none}.chip,.dot{animation:none}html{scroll-behavior:auto}}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}"""
 
 def head(fn, title, desc):
@@ -55,18 +75,18 @@ def head(fn, title, desc):
 <title>{title}</title><meta name="description" content="{desc}"><meta name="author" content="Nikhil Chary Sriramoju">
 <meta name="theme-color" content="#0b0e14"><link rel="canonical" href="{url}">
 <meta property="og:type" content="website"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:url" content="{url}">
-<meta name="twitter:card" content="summary_large_image">{EXTRA}<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236ea8fe'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css"><script type="application/ld+json">{json.dumps(ld)}</script></head>"""
+<meta name="twitter:card" content="summary_large_image">{EXTRA}<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css"><script defer src="fx.js"></script><script type="application/ld+json">{json.dumps(ld)}</script></head>"""
 
 def header(fn):
     links = "".join(f'<a href="{h}"' + (' aria-current="page"' if h == fn else "") + f">{n}</a>" for n, h in NAV)
-    return f"""<body><a class="skip" href="#main">Skip to content</a>
-<header class="hd"><div class="w"><a class="brand" href="index.html"><span class="logo"></span>{BRAND}</a>
+    return f"""<body>{SYMBOL}<a class="skip" href="#main">Skip to content</a>
+<header class="hd"><div class="w"><a class="brand" href="index.html"><svg class="logo" width="28" height="28" aria-hidden="true"><use href="#lg"/></svg>{BRAND}</a>
 <nav id="nav" aria-label="Main">{links}<a class="btn" href="demo.html">Try the demo</a></nav>
 <button id="mb" aria-label="Menu" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#9776;</button></div></header><main id="main">"""
 
 FOOT = f"""</main><footer><div class="w"><div class="fg">
-<div><a class="brand" href="index.html" style="margin:0 0 8px"><span class="logo"></span>{BRAND}</a>
+<div><a class="brand" href="index.html" style="margin:0 0 8px"><svg class="logo" width="28" height="28" aria-hidden="true"><use href="#lg"/></svg>{BRAND}</a>
 <p style="color:var(--mut);font-size:14px;margin:0;max-width:300px">AI agents that draft cited answers to customer security questionnaires from your own policies.</p></div>
 <div><h4>Product</h4><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="docs.html">Documentation</a><a href="roi.html">ROI calculator</a><a href="demo.html">Live demo</a><a href="{REPO}">Source code</a></div>
 <div><h4>Company</h4><a href="about.html">About</a><a href="security.html">Security</a><a href="contact.html">Contact</a></div>
@@ -79,10 +99,19 @@ def write(fn, title, desc, body):
 
 def card(t, p): return f'<div class="card"><h3>{t}</h3><p>{p}</p></div>'
 
-HOME = f"""<div class="hero w"><span class="pill">Early access &middot; built for B2B SaaS teams</span>
-<h1>Security questionnaires, answered in minutes, not days.</h1>
-<p>AI agents draft answers from your own policies and evidence. A critic checks every claim against its source. Your team approves, then exports to the original spreadsheet.</p>
-<div class="cta"><a class="btn" href="demo.html">Try the live demo</a><a class="btn o" href="contact.html">Get early access</a></div></div>
+HOME = f"""<div class="hero"><canvas id="fx" aria-hidden="true"></canvas><div class="w hero-in"><span class="pill"><i class="dot"></i>Early access &middot; agentic compliance AI</span>
+<h1>Answer security questionnaires with <span class="grad">evidence, not guesswork.</span></h1>
+<p>Attestra's AI agents draft answers from your own policies, a critic verifies every claim against its source, and your team approves. Export straight back into the buyer's spreadsheet.</p>
+<div class="cta"><a class="btn" href="demo.html">Try the live demo</a><a class="btn o" href="contact.html">Get early access</a></div>
+<div class="term" role="img" aria-label="Illustrative terminal output"><div class="bar"><i></i><i></i><i></i><span>illustrative output</span></div>
+<div class="ln" style="--d:.2s"><b>$</b> attestra draft vendor-questionnaire.xlsx</div>
+<div class="ln ok" style="--d:1.1s">&#10003; parsed questions from the spreadsheet</div>
+<div class="ln ok" style="--d:1.9s">&#10003; searched your policies and evidence</div>
+<div class="ln ok" style="--d:2.7s">&#10003; drafted answers with citations</div>
+<div class="ln wn" style="--d:3.5s">! weak or sensitive answers escalated to a human</div>
+<div class="ln ok" style="--d:4.3s">&#10003; exported answers.xlsx</div></div>
+<p class="built">Stack: FastAPI &middot; pgvector &middot; LangGraph &middot; Claude API &middot; Docker</p></div></div>
+<section><div class="w"><div class="pipe"><span class="chip" style="--i:0">Ingest</span><span class="chip" style="--i:1">Plan</span><span class="chip" style="--i:2">Draft</span><span class="chip" style="--i:3">Critic</span><span class="chip" style="--i:4">Human approval</span><span class="chip" style="--i:5">Export</span></div></div></section>
 <section id="how"><div class="w"><h2>How it works</h2><p class="sub">From a buyer's spreadsheet to a reviewed, export-ready answer set.</p><div class="grid">
 {card('<span class="num">1</span> Upload your policies','Add PDFs, Word docs, or text. We split them into searchable, citable passages.')}
 {card('<span class="num">2</span> Upload the questionnaire','Drop in the buyer\'s XLSX. Questions are detected automatically.')}
@@ -101,6 +130,11 @@ HOME = f"""<div class="hero w"><span class="pill">Early access &middot; built fo
 <details><summary>Where does my data go?</summary><p>The live demo runs entirely in your browser. The full product sends text to a language model only after masking personal data, and is designed for zero-retention provider settings. See the <a href="security.html">Security</a> page for what exists today and what is planned.</p></details>
 <details><summary>Are you SOC 2 certified?</summary><p>No. We are an early-stage company and will publish our certification status honestly as it changes.</p></details>
 <details><summary>How do I get started?</summary><p>Try the <a href="demo.html">live demo</a>, then <a href="contact.html">contact us</a> about an early-access pilot.</p></details></div></section>
+<section><div class="w"><h2>On the roadmap</h2><p class="sub">Not built yet. Listed so you know where we are going.</p><div class="grid">
+{card('Agentic portal filling','A browser agent that fills buyer portals, always with human sign-off.')}
+{card('Chat approvals','Approve or edit escalated answers from Slack or Teams.')}
+{card('Verifiable audit trail','Tamper-evident approval history you can hand to auditors.')}
+{card('Evidence integrations','Sync policies and controls from Drata, Vanta, Drive and Notion.')}</div></div></section>
 <section class="band"><div class="w"><h2>See it on your own questionnaire</h2><p class="sub">Send one redacted questionnaire and we will return cited drafts for you to judge.</p>
 <a class="btn" href="contact.html">Request a pilot</a></div></section>"""
 
@@ -110,7 +144,7 @@ write("index.html", f"{BRAND}: Cited AI answers for security questionnaires",
 def tier(n, pr, items, feat=False):
     li = "".join(f"<li>{i}</li>" for i in items)
     return f'<div class="card"{" style=border-color:var(--acc)" if feat else ""}><h3>{n}</h3><div class="price">{pr}<small>/month</small></div><ul>{li}</ul><a class="btn{"" if feat else " o"}" href="contact.html">Request access</a></div>'
-write("pricing.html", f"Pricing | {BRAND}", "Early-access pricing for Questionnaire AI, based on completed questionnaires.",
+write("pricing.html", f"Pricing | {BRAND}", "Early-access pricing for Attestra, based on completed questionnaires.",
  f"""<div class="w page"><h1>Pricing</h1><p>Early-access pricing, charged per completed questionnaire because value scales with volume, not seats. Prices are indicative while we run pilots.</p>
 <div class="grid" style="margin-top:20px">
 {tier("Starter","$199",["5 questionnaires / month","1 workspace","Answer library","Email support"])}
@@ -118,7 +152,7 @@ write("pricing.html", f"Pricing | {BRAND}", "Early-access pricing for Questionna
 {tier("Scale","$1,200+",["60+ questionnaires / month","SSO and advanced audit (planned)","Custom retention","Dedicated support"])}</div>
 <p style="margin-top:20px">Extra questionnaires: $15-25 each. <b>Pilot offer:</b> design partners get a free first questionnaire and discounted early pricing in exchange for feedback. <a href="contact.html">Ask about the pilot</a>.</p></div>""")
 
-write("security.html", f"Security | {BRAND}", "How Questionnaire AI handles data, what exists today, and what is planned.",
+write("security.html", f"Security | {BRAND}", "How Attestra handles data, what exists today, and what is planned.",
  f"""<div class="w page"><h1>Security</h1><p>You are trusting us with security answers, so we are specific about what is built today and what is not. Last updated {UPDATED}.</p>
 <div class="tbl"><table><tr><th>Area</th><th>Status</th><th>Detail</th></tr>
 <tr><td>Cited, critic-checked answers</td><td>Built</td><td>No citation means escalation to a human.</td></tr>
@@ -131,20 +165,20 @@ write("security.html", f"Security | {BRAND}", "How Questionnaire AI handles data
 <h2>Live demo</h2><p>The demo on this site runs in your browser. Text you enter is not sent to our servers.</p>
 <h2>Report a vulnerability</h2><p>Email <a href="mailto:{EMAIL}">{EMAIL}</a> or use <a href="{REPO}/security/advisories">GitHub Security Advisories</a>. Please do not disclose publicly before we respond.</p></div>""")
 
-write("about.html", f"About | {BRAND}", "About Questionnaire AI and its founder, Nikhil Chary Sriramoju.",
+write("about.html", f"About | {BRAND}", "About Attestra and its founder, Nikhil Chary Sriramoju.",
  f"""<div class="w page"><h1>About</h1><p>Enterprise deals stall in security review. Teams spend hours re-answering the same questions from scattered documents. We are building agents that do the first draft with evidence attached, so people only review.</p>
 <h2>Our principles</h2><ul><li>Evidence first: no source, no claim.</li><li>Humans decide: automation drafts, people approve.</li><li>Honest about maturity: we publish what exists and what does not.</li></ul>
 <h2>Founder</h2><div class="card"><h3>Nikhil Chary Sriramoju</h3><p>Founder, designer and developer. Final-year B.Tech Computer Science student building agentic AI, RAG and security-focused systems.</p>
 <p style="margin-top:10px"><a href="{GH}" rel="noopener">GitHub</a> &middot; <a href="{LI}" rel="noopener">LinkedIn</a></p></div></div>""")
 
-write("contact.html", f"Contact | {BRAND}", "Contact Questionnaire AI for early access, pilots and security reports.",
+write("contact.html", f"Contact | {BRAND}", "Contact Attestra for early access, pilots and security reports.",
  f"""<div class="w page"><h1>Contact</h1><p>Request early access, ask about a pilot, or share feedback. We reply by email.</p>
 <div class="grid" style="margin-top:20px">{card("Early access and pilots",f'<a href="mailto:{EMAIL}?subject=Questionnaire%20AI%20pilot">{EMAIL}</a>')}
 {card("Security reports",f'<a href="mailto:{EMAIL}?subject=Security%20report">{EMAIL}</a>')}
 {card("Code and issues",f'<a href="{REPO}/issues" rel="noopener">GitHub issues</a>')}
 {card("Founder",f'<a href="{LI}" rel="noopener">LinkedIn</a> &middot; <a href="{GH}" rel="noopener">GitHub</a>')}</div></div>""")
 
-write("privacy.html", f"Privacy Policy | {BRAND}", "Privacy Policy for the Questionnaire AI website and demo.",
+write("privacy.html", f"Privacy Policy | {BRAND}", "Privacy Policy for the Attestra website and demo.",
  f"""<div class="w page"><h1>Privacy Policy</h1><p>Last updated {UPDATED}.</p>
 <h2>What this site collects</h2><p>This website is static. It does not use cookies, advertising trackers or analytics. Hosting is provided by GitHub Pages, which may process standard server logs such as IP addresses under its own policy.</p>
 <h2>Live demo</h2><p>Text you enter into the demo is processed in your browser and is not transmitted to us.</p>
@@ -152,7 +186,7 @@ write("privacy.html", f"Privacy Policy | {BRAND}", "Privacy Policy for the Quest
 <h2>Product data</h2><p>Terms for customer data in the hosted product will be provided in a data processing agreement before any pilot involving real documents.</p>
 <h2>Your rights and contact</h2><p>To ask about or delete anything you sent us, email <a href="mailto:{EMAIL}">{EMAIL}</a>.</p></div>""")
 
-write("terms.html", f"Terms of Service | {BRAND}", "Terms of Service for the Questionnaire AI website and demo.",
+write("terms.html", f"Terms of Service | {BRAND}", "Terms of Service for the Attestra website and demo.",
  f"""<div class="w page"><h1>Terms of Service</h1><p>Last updated {UPDATED}.</p>
 <h2>Use of the site and demo</h2><p>The site and demo are provided for evaluation. Do not enter confidential or regulated data into the demo.</p>
 <h2>No guarantee of accuracy</h2><p>Drafted answers are suggestions generated from the material you supply. You are responsible for reviewing and approving every answer before sharing it with a third party.</p>
@@ -164,7 +198,7 @@ write("404.html", f"Page not found | {BRAND}", "Page not found.",
  '<div class="w page" style="text-align:center"><h1>404</h1><p>That page does not exist.</p><a class="btn" href="index.html">Back to home</a></div>')
 
 
-write("contact.html", f"Contact | {BRAND}", "Contact Questionnaire AI for early access, pilots and security reports.", """<div class="w page"><h1>Contact</h1>
+write("contact.html", f"Contact | {BRAND}", "Contact Attestra for early access, pilots and security reports.", """<div class="w page"><h1>Contact</h1>
 <p>Request early access, ask about a pilot, or share feedback. Submitting opens your email app with the message filled in.</p>
 <div class="grid" style="margin-top:16px"><form id="cf" class="card"><label for="nm">Name</label><input id="nm" required autocomplete="name">
 <label for="em">Your email</label><input id="em" type="email" required autocomplete="email"><label for="co">Company</label><input id="co" autocomplete="organization">
@@ -173,7 +207,7 @@ write("contact.html", f"Contact | {BRAND}", "Contact Questionnaire AI for early 
 <div><div class="card"><h3>Email</h3><p><a href="mailto:@EMAIL@">@EMAIL@</a></p></div><div class="card" style="margin-top:14px"><h3>Elsewhere</h3><p><a href="@GH@/issues" rel="noopener">GitHub issues</a><br><a href="@LI@" rel="noopener">LinkedIn</a><br><a href="@GH@" rel="noopener">GitHub</a></p></div></div></div>
 <script>document.getElementById('cf').onsubmit=function(e){e.preventDefault();var g=function(i){return document.getElementById(i).value};
 var b='Name: '+g('nm')+'\\nCompany: '+g('co')+'\\nEmail: '+g('em')+'\\n\\n'+g('msg');
-location.href='mailto:@EMAIL@?subject='+encodeURIComponent('Questionnaire AI: '+g('topic'))+'&body='+encodeURIComponent(b)}</script></div>""".replace("@EMAIL@", EMAIL).replace("@GH@", GH).replace("@LI@", LI))
+location.href='mailto:@EMAIL@?subject='+encodeURIComponent('Attestra: '+g('topic'))+'&body='+encodeURIComponent(b)}</script></div>""".replace("@EMAIL@", EMAIL).replace("@GH@", GH).replace("@LI@", LI))
 
 write("roi.html", f"ROI Calculator | {BRAND}", "Estimate hours and money saved by automating security questionnaires.", """<div class="w page"><h1>ROI calculator</h1>
 <p>A rough estimate. Change the numbers to match your team. The default time saved is an assumption to test in a pilot, not a guarantee.</p>
@@ -186,7 +220,7 @@ write("roi.html", f"ROI Calculator | {BRAND}", "Estimate hours and money saved b
 $('o').innerHTML='<b>'+s.toFixed(0)+'</b> hours saved / month<br><b>$'+(s*r).toFixed(0).replace(/\\B(?=(\\d{3})+(?!\\d))/g,',')+'</b> estimated value / month'}
 document.querySelectorAll('input').forEach(function(e){e.oninput=calc});calc()</script></div>""")
 
-write("docs.html", f"Documentation | {BRAND}", "Quickstart, API reference and configuration for Questionnaire AI.", """<div class="w page"><h1>Documentation</h1>
+write("docs.html", f"Documentation | {BRAND}", "Quickstart, API reference and configuration for Attestra.", """<div class="w page"><h1>Documentation</h1>
 <p>Run the API locally, upload policies, process a questionnaire, and export answers.</p>
 <h2>Quickstart</h2><pre><code>git clone @REPO@.git
 cd questionnaire-ai/apps/api
@@ -213,6 +247,7 @@ curl -OJ http://localhost:8000/api/questionnaires/&lt;id&gt;/export</code></pre>
 <h2>Limits</h2><p>The current build stores data in memory and is for evaluation. See the <a href="security.html">Security</a> page.</p></div>""".replace("@REPO@", REPO))
 
 open(os.path.join(OUT, "style.css"), "w").write(CSS)
+open(os.path.join(OUT, "fx.js"), "w").write("(function(){var c=document.getElementById('fx');if(!c||matchMedia('(prefers-reduced-motion:reduce)').matches)return;\nvar x=c.getContext('2d'),P=[],W,H,N=42;function rs(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight}rs();addEventListener('resize',rs);\nfor(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35});\n(function f(){x.clearRect(0,0,W,H);P.forEach(function(p,i){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;\nx.fillStyle='rgba(34,211,238,.8)';x.fillRect(p.x,p.y,2,2);for(var j=i+1;j<N;j++){var q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);\nif(d<120){x.strokeStyle='rgba(139,92,246,'+(1-d/120)*.3+')';x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke()}}});requestAnimationFrame(f)})()})();")
 pages = ["index.html", "pricing.html", "security.html", "about.html", "contact.html", "privacy.html", "terms.html", "docs.html", "roi.html", "demo.html"]
 open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
     "".join(f"<url><loc>{BASE}{'' if p == 'index.html' else p}</loc></url>" for p in pages) + "</urlset>")

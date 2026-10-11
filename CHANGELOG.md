@@ -1,4 +1,6 @@
 # Changelog
+## 1.3.0
+- Rebrand to Attestra: new logo (SVG set), animated hero with particle network and terminal demo, glass UI, roadmap section.
 ## 1.2.0
 - Company website (9 pages) with header/footer, docs, ROI calculator, contact form, SEO files, security.txt.
 - Optional API key and rate limiting for `/api`. Repo health files (issue templates, CODEOWNERS, Dependabot).

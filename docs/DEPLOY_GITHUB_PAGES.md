@@ -5,7 +5,7 @@ GitHub Pages hosts static files only, so it serves the in-browser demo in `site/
 1. Create a new **public** repo named `questionnaire-ai` on GitHub (no README).
 2. Push this project:
    ```bash
-   git init && git add . && git commit -m "Questionnaire AI master release"
+   git init && git add . && git commit -m "Attestra master release"
    git branch -M main
    git remote add origin https://github.com/Nikhil-creat/questionnaire-ai.git
    git push -u origin main
