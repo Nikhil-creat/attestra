@@ -7,6 +7,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install -r apps/api/requirements.txt pytest
+      - run: pip install -r apps/api/requirements.txt pytest httpx
       - run: python -m pytest -q tests
       - run: python eval/run_eval.py

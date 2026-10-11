@@ -2,8 +2,8 @@
 Designed and developed by NIKHIL CHARY SRIRAMOJU
 
 ## Stage 1: Make it real (weeks 1-3)
-1. **Auth + tenants:** Clerk/Auth0 JWT; derive tenant from the token, never from a header.
-2. **Postgres + RLS:** apply `apps/api/db/schema.sql`; `SET LOCAL app.tenant_id` per request; replace `STORE`.
+1. **Auth + tenants (done in 1.4.0: email/password; SSO still to do):** Clerk/Auth0 JWT; derive tenant from the token, never from a header.
+2. **Postgres + RLS (done in 1.4.0; needs independent testing):** apply `apps/api/db/schema.sql`; `SET LOCAL app.tenant_id` per request; replace `STORE`.
 3. **Embeddings + hybrid search:** pgvector + Postgres full-text, reciprocal rank fusion, cross-encoder rerank.
 4. **LangGraph:** wire `agents/graph.py` to the real functions; Postgres checkpointer for resumable jobs.
 5. **Async jobs:** Celery/ARQ + progress via SSE; limits per tenant.

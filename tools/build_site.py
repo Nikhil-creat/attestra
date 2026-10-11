@@ -158,8 +158,8 @@ write("security.html", f"Security | {BRAND}", "How Attestra handles data, what e
 <tr><td>Cited, critic-checked answers</td><td>Built</td><td>No citation means escalation to a human.</td></tr>
 <tr><td>PII masking before LLM calls</td><td>Built</td><td>Emails, phone numbers and IP addresses are masked.</td></tr>
 <tr><td>Audit log of approvals</td><td>Built</td><td>Uploads, runs and approvals are timestamped.</td></tr>
-<tr><td>Tenant isolation (Postgres row-level security)</td><td>Designed</td><td>Schema is written; wiring to the API is in progress.</td></tr>
-<tr><td>Authentication and SSO</td><td>Planned</td><td>Required before any production customer data.</td></tr>
+<tr><td>Tenant isolation (Postgres row-level security)</td><td>Built, in testing</td><td>Enforced in the database; independent testing still to do.</td></tr>
+<tr><td>Accounts and authentication</td><td>Built</td><td>Hashed passwords, expiring signed tokens, login rate limits. SSO is planned.</td></tr>
 <tr><td>Zero-retention LLM settings</td><td>Planned</td><td>Contractual and configuration controls with the model provider.</td></tr>
 <tr><td>SOC 2</td><td>Not started</td><td>We will begin once paying customers justify it, and publish status honestly.</td></tr></table></div>
 <h2>Live demo</h2><p>The demo on this site runs in your browser. Text you enter is not sent to our servers.</p>
@@ -226,10 +226,12 @@ write("docs.html", f"Documentation | {BRAND}", "Quickstart, API reference and co
 cd questionnaire-ai/apps/api
 pip install -r requirements.txt
 uvicorn main:app --reload     # http://localhost:8000</code></pre>
-<h2>Example</h2><pre><code>curl -F file=@policy.md http://localhost:8000/api/documents
-curl -F file=@questionnaire.xlsx http://localhost:8000/api/questionnaires
-curl -OJ http://localhost:8000/api/questionnaires/&lt;id&gt;/export</code></pre>
+<h2>Example</h2><pre><code>TOKEN=$(curl -s -X POST localhost:8000/api/auth/register -H 'Content-Type: application/json' \
+  -d '{"email":"you@company.com","password":"a-long-password","org":"Acme"}' | python -c "import sys,json;print(json.load(sys.stdin)['token'])")
+curl -H "Authorization: Bearer $TOKEN" -F file=@policy.md localhost:8000/api/documents
+curl -H "Authorization: Bearer $TOKEN" -F file=@questionnaire.xlsx localhost:8000/api/questionnaires</code></pre>
 <h2>API reference</h2><div class="tbl"><table><tr><th>Method and path</th><th>Purpose</th></tr>
+<tr><td><code>POST /api/auth/register</code> and <code>/login</code></td><td>Create an account or log in; returns a bearer token</td></tr>
 <tr><td><code>POST /api/documents</code></td><td>Upload a policy (pdf, docx, txt, md)</td></tr>
 <tr><td><code>POST /api/questionnaires</code></td><td>Upload XLSX; returns drafted, cited answers</td></tr>
 <tr><td><code>GET /api/questionnaires/{id}</code></td><td>Fetch a run</td></tr>
@@ -241,10 +243,10 @@ curl -OJ http://localhost:8000/api/questionnaires/&lt;id&gt;/export</code></pre>
 <h2>Configuration</h2><div class="tbl"><table><tr><th>Variable</th><th>Meaning</th></tr>
 <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Enables LLM drafting. Without it, offline extractive mode is used.</td></tr>
 <tr><td><code>ANTHROPIC_MODEL</code></td><td>Model name for drafting</td></tr>
-<tr><td><code>API_KEY</code></td><td>If set, every <code>/api</code> request must send <code>X-API-Key</code></td></tr>
+<tr><td><code>JWT_SECRET</code></td><td>Required in production: 32+ random characters for signing tokens</td></tr><tr><td><code>DATABASE_URL</code></td><td>Postgres connection string. Empty means in-memory dev mode</td></tr><tr><td><code>ALLOW_REGISTER</code></td><td>Set to 0 to close open registration</td></tr>
 <tr><td><code>RATE_LIMIT</code></td><td>Max <code>/api</code> requests per minute per client (default 60)</td></tr></table></div>
-<p>Send <code>X-Tenant</code> to separate workspaces in the demo build. Production tenancy will come from authenticated tokens.</p>
-<h2>Limits</h2><p>The current build stores data in memory and is for evaluation. See the <a href="security.html">Security</a> page.</p></div>""".replace("@REPO@", REPO))
+<p>All data is scoped to the tenant inside your login token. Clients cannot choose a tenant.</p>
+<h2>Limits</h2><p>Without <code>DATABASE_URL</code> data lives in memory and is lost on restart. Postgres mode is built but should be independently tested before real customer data. See the <a href="security.html">Security</a> page.</p></div>""".replace("@REPO@", REPO))
 
 open(os.path.join(OUT, "style.css"), "w").write(CSS)
 open(os.path.join(OUT, "fx.js"), "w").write("(function(){var c=document.getElementById('fx');if(!c||matchMedia('(prefers-reduced-motion:reduce)').matches)return;\nvar x=c.getContext('2d'),P=[],W,H,N=42;function rs(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight}rs();addEventListener('resize',rs);\nfor(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35});\n(function f(){x.clearRect(0,0,W,H);P.forEach(function(p,i){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;\nx.fillStyle='rgba(34,211,238,.8)';x.fillRect(p.x,p.y,2,2);for(var j=i+1;j<N;j++){var q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);\nif(d<120){x.strokeStyle='rgba(139,92,246,'+(1-d/120)*.3+')';x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke()}}});requestAnimationFrame(f)})()})();")

@@ -12,8 +12,8 @@
 <tr><td>Cited, critic-checked answers</td><td>Built</td><td>No citation means escalation to a human.</td></tr>
 <tr><td>PII masking before LLM calls</td><td>Built</td><td>Emails, phone numbers and IP addresses are masked.</td></tr>
 <tr><td>Audit log of approvals</td><td>Built</td><td>Uploads, runs and approvals are timestamped.</td></tr>
-<tr><td>Tenant isolation (Postgres row-level security)</td><td>Designed</td><td>Schema is written; wiring to the API is in progress.</td></tr>
-<tr><td>Authentication and SSO</td><td>Planned</td><td>Required before any production customer data.</td></tr>
+<tr><td>Tenant isolation (Postgres row-level security)</td><td>Built, in testing</td><td>Enforced in the database; independent testing still to do.</td></tr>
+<tr><td>Accounts and authentication</td><td>Built</td><td>Hashed passwords, expiring signed tokens, login rate limits. SSO is planned.</td></tr>
 <tr><td>Zero-retention LLM settings</td><td>Planned</td><td>Contractual and configuration controls with the model provider.</td></tr>
 <tr><td>SOC 2</td><td>Not started</td><td>We will begin once paying customers justify it, and publish status honestly.</td></tr></table></div>
 <h2>Live demo</h2><p>The demo on this site runs in your browser. Text you enter is not sent to our servers.</p>

@@ -18,6 +18,7 @@ CREATE TABLE documents (
   title text,
   effective_date date,
   storage_path text,
+  text text,
   approved boolean DEFAULT true,
   created_at timestamptz DEFAULT now()
 );
@@ -83,21 +84,49 @@ CREATE TABLE agent_runs (
   created_at timestamptz DEFAULT now()
 );
 
+-- Accounts. users and tenants are intentionally NOT under RLS: login looks users up by email
+-- before the tenant is known. The app only reads/writes them through the store layer.
+CREATE TABLE users (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id uuid NOT NULL REFERENCES tenants(id),
+  email text NOT NULL UNIQUE,
+  pw_hash text NOT NULL,
+  role text NOT NULL DEFAULT 'owner',
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE runs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id uuid NOT NULL REFERENCES tenants(id),
+  src bytea NOT NULL,
+  items jsonb NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE audit (
+  id bigserial PRIMARY KEY,
+  tenant_id uuid NOT NULL REFERENCES tenants(id),
+  ts timestamptz DEFAULT now(),
+  event text NOT NULL,
+  data jsonb DEFAULT '{}'
+);
+
 -- Row-level security on every tenant table
 DO $$
 DECLARE t text;
 BEGIN
   FOREACH t IN ARRAY ARRAY['documents','chunks','questionnaires','questions',
-                           'answers','approved_answers','agent_runs']
+                           'answers','approved_answers','agent_runs','runs','audit']
   LOOP
     EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY', t);
     EXECUTE format('ALTER TABLE %I FORCE ROW LEVEL SECURITY', t);
     EXECUTE format(
       'CREATE POLICY tenant_isolation ON %I
-         USING (tenant_id = current_setting(''app.tenant_id'', true)::uuid)
-         WITH CHECK (tenant_id = current_setting(''app.tenant_id'', true)::uuid)', t);
+         USING (tenant_id = NULLIF(current_setting(''app.tenant_id'', true), '''')::uuid)
+         WITH CHECK (tenant_id = NULLIF(current_setting(''app.tenant_id'', true), '''')::uuid)', t);
   END LOOP;
 END $$;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO qai_app;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO qai_app;  -- needed for audit.id (bigserial)
 -- Per request, the API runs:  SET LOCAL app.tenant_id = '<tenant uuid>';

@@ -1,4 +1,6 @@
 # Changelog
+## 1.4.0
+- Accounts and login (scrypt + signed tokens), tenant taken from token only, Postgres store with row-level security, auth rate limiting. Removed X-Tenant header and API_KEY.
 ## 1.3.0
 - Rebrand to Attestra: new logo (SVG set), animated hero with particle network and terminal demo, glass UI, roadmap section.
 ## 1.2.0

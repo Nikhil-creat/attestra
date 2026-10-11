@@ -5,3 +5,4 @@ openpyxl
 pypdf
 python-docx
 anthropic
+psycopg[binary]

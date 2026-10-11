@@ -1,36 +1,35 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Attestra</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Attestra</title>
 <style>
-:root{--bg:#0f1115;--fg:#e8eaf0;--mut:#8a90a2;--card:#181b22;--acc:#6ea8fe;--ok:#4cc38a;--warn:#f0b429}
-@media(prefers-color-scheme:light){:root{--bg:#f6f7fa;--fg:#14161c;--mut:#5b6172;--card:#fff}}
-*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg);padding:16px;max-width:980px;margin:auto}
-h1{margin:8px 0}.card{background:var(--card);border-radius:12px;padding:14px;margin:12px 0}
-button,input{font:inherit}button{background:var(--acc);color:#000;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
-.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #8883;text-align:left;vertical-align:top}
-.pass{color:var(--ok)}.escalate{color:var(--warn)}footer{color:var(--mut);text-align:center;margin:24px 0;font-size:13px}a{color:var(--acc)}
+:root{--bg:#0b0e14;--fg:#e9ecf3;--mut:#9aa3b5;--card:#121722;--acc:#22d3ee;--ok:#4cc38a;--warn:#f0b429}
+@media(prefers-color-scheme:light){:root{--bg:#f6f7fa;--fg:#14161c;--mut:#5b6172;--card:#fff;--acc:#0e7490}}
+*{box-sizing:border-box}body{margin:auto;max-width:980px;padding:16px;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+.card{background:var(--card);border-radius:12px;padding:14px;margin:12px 0}input{font:inherit;padding:8px;border-radius:8px;border:1px solid #8885;background:transparent;color:inherit;margin:3px 0;max-width:100%}
+button{font:inherit;background:var(--acc);color:#05101c;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}
+td,th{padding:8px;border-bottom:1px solid #8883;text-align:left;vertical-align:top}.pass{color:var(--ok)}.escalate{color:var(--warn)}small,footer{color:var(--mut)}footer{text-align:center;margin:24px 0;font-size:13px}a{color:var(--acc)}
 </style></head><body>
-<h1>Attestra</h1><div style="color:var(--mut)">Cited answers, checked by a critic, approved by you.</div>
-<div class="card"><b>1. Upload policies</b> (pdf, docx, txt, md)<br><input type="file" id="docs" multiple> <button onclick="up()">Upload</button> <span id="m1"></span></div>
+<h1>Attestra</h1><small>Cited answers, checked by a critic, approved by you.</small>
+<div class="card" id="lg"><b>Sign in</b><br><input id="em" type="email" placeholder="email" autocomplete="username"> <input id="pw" type="password" placeholder="password (10+ chars)" autocomplete="current-password"><br>
+<input id="org" placeholder="organization (for new account)"> <button onclick="auth('login')">Log in</button> <button onclick="auth('register')">Create account</button> <span id="m0"></span></div>
+<div id="app" hidden><div class="card"><b>1. Upload policies</b> (pdf, docx, txt, md)<br><input type="file" id="docs" multiple> <button onclick="up()">Upload</button> <span id="m1"></span></div>
 <div class="card"><b>2. Upload questionnaire</b> (xlsx)<br><input type="file" id="q"> <button onclick="run()">Draft answers</button> <span id="m2"></span></div>
-<div class="card" id="res" hidden><div id="sum"></div><div class="wrap"><table id="t"></table></div><p><button onclick="exp()">Export XLSX</button></p></div>
-<footer>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b><br>
-<a href="https://github.com/Nikhil-creat">GitHub</a> · <a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a">LinkedIn</a></footer>
+<div class="card" id="res" hidden><div id="sum"></div><div class="wrap"><table id="t"></table></div><p><button onclick="exp()">Export XLSX</button> <button onclick="out()">Log out</button></p></div></div>
+<footer>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b><br><a href="https://github.com/Nikhil-creat">GitHub</a> · <a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a">LinkedIn</a></footer>
 <script>
-let rid=null;const $=id=>document.getElementById(id);
-async function up(){let n=0;for(const f of $('docs').files){const d=new FormData();d.append('file',f);
- const r=await fetch('/api/documents',{method:'POST',body:d});if(r.ok)n++;}$('m1').textContent=n+' uploaded'}
+const $=id=>document.getElementById(id);let rid=null;
+const tok=()=>sessionStorage.getItem('t');
+const api=(u,o={})=>fetch(u,{...o,headers:{...(o.headers||{}),Authorization:'Bearer '+tok()}});
+function gate(){const on=!!tok();$('lg').hidden=on;$('app').hidden=!on}gate();
+async function auth(kind){const r=await fetch('/api/auth/'+kind,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('em').value,password:$('pw').value,org:$('org').value||null})});
+ const j=await r.json();if(!r.ok){$('m0').textContent=typeof j.detail==='string'?j.detail:'check email and password (10+ characters)';return}
+ sessionStorage.setItem('t',j.token);$('pw').value='';gate()}
+function out(){sessionStorage.removeItem('t');location.reload()}
+async function up(){let n=0;for(const f of $('docs').files){const d=new FormData();d.append('file',f);const r=await api('/api/documents',{method:'POST',body:d});if(r.ok)n++}$('m1').textContent=n+' uploaded'}
 async function run(){const d=new FormData();d.append('file',$('q').files[0]);$('m2').textContent='working...';
- const r=await fetch('/api/questionnaires',{method:'POST',body:d});const j=await r.json();
- if(!r.ok){$('m2').textContent=j.detail;return}$('m2').textContent='done';rid=j.id;show(j)}
-function show(j){$('res').hidden=false;const s=j.summary;
- $('sum').textContent=`${s.total} questions: ${s.auto_passed} auto-passed, ${s.escalated} need review`;
- $('t').innerHTML='<tr><th>Question</th><th>Answer</th><th>Status</th><th></th></tr>'+j.items.map((i,n)=>
- `<tr><td>${esc(i.question)}</td><td>${esc(i.answer)}<br><small>${esc(i.citations.join(', '))}</small></td>
- <td class="${i.verdict}">${i.verdict} (${i.confidence})<br><small>${esc(i.reason)}</small><br>${i.status}</td>
- <td><button onclick="ap(${n})">Approve</button></td></tr>`).join('')}
+ const r=await api('/api/questionnaires',{method:'POST',body:d});const j=await r.json();if(!r.ok){$('m2').textContent=j.detail;return}$('m2').textContent='done';rid=j.id;show(j)}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-async function ap(n){await fetch(`/api/questionnaires/${rid}/items/${n}/approve`,{method:'POST'});
- show(await (await fetch('/api/questionnaires/'+rid)).json())}
-function exp(){location='/api/questionnaires/'+rid+'/export'}
+function show(j){$('res').hidden=false;const s=j.summary;$('sum').textContent=`${s.total} questions: ${s.auto_passed} auto-passed, ${s.escalated} need review`;
+ $('t').innerHTML='<tr><th>Question</th><th>Answer</th><th>Status</th><th></th></tr>'+j.items.map((i,n)=>`<tr><td>${esc(i.question)}</td><td>${esc(i.answer)}<br><small>${esc(i.citations.join(', '))}</small></td><td class="${i.verdict}">${i.verdict} (${i.confidence})<br><small>${esc(i.reason)}</small><br>${i.status}</td><td><button onclick="ap(${n})">Approve</button></td></tr>`).join('')}
+async function ap(n){await api(`/api/questionnaires/${rid}/items/${n}/approve`,{method:'POST'});show(await (await api('/api/questionnaires/'+rid)).json())}
+async function exp(){const r=await api('/api/questionnaires/'+rid+'/export');const a=document.createElement('a');a.href=URL.createObjectURL(await r.blob());a.download='answers.xlsx';a.click()}
 </script></body></html>
