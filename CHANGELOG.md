@@ -1,4 +1,7 @@
 # Changelog
+## 1.2.0
+- Company website (9 pages) with header/footer, docs, ROI calculator, contact form, SEO files, security.txt.
+- Optional API key and rate limiting for `/api`. Repo health files (issue templates, CODEOWNERS, Dependabot).
 ## 1.1.0
 - Added answer library reuse, PII masking, audit log, stale-document detection, gap analysis, golden-set eval.
 - Added in-browser live demo (`site/`) and GitHub Pages workflow.

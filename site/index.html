@@ -1,59 +1,40 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Questionnaire AI - Live Demo</title>
-<meta name="description" content="Cited answers to security questionnaires. Runs fully in your browser. By Nikhil Chary Sriramoju.">
-<style>
-:root{--bg:#0f1115;--fg:#e8eaf0;--mut:#8a90a2;--card:#181b22;--acc:#6ea8fe;--ok:#4cc38a;--warn:#f0b429}
-@media(prefers-color-scheme:light){:root{--bg:#f6f7fa;--fg:#14161c;--mut:#5b6172;--card:#fff}}
-*{box-sizing:border-box}body{margin:auto;max-width:980px;padding:16px;font:15px system-ui,sans-serif;background:var(--bg);color:var(--fg)}
-.card{background:var(--card);border-radius:12px;padding:14px;margin:12px 0}textarea{width:100%;height:150px;font:13px ui-monospace,monospace;background:transparent;color:inherit;border:1px solid #8885;border-radius:8px;padding:8px}
-button{background:var(--acc);color:#000;border:0;border-radius:8px;padding:9px 14px;font:inherit;cursor:pointer;margin-right:6px}
-.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #8883;text-align:left;vertical-align:top}
-.pass{color:var(--ok)}.escalate{color:var(--warn)}small,footer{color:var(--mut)}footer{text-align:center;margin:24px 0;font-size:13px}a{color:var(--acc)}
-</style></head><body>
-<h1>Questionnaire AI</h1>
-<small>Live demo. Everything runs in your browser; nothing is uploaded. The full backend lives in the repo.</small>
-<div class="card"><b>1. Your policy text</b> (paragraphs separated by blank lines)<textarea id="pol"></textarea></div>
-<div class="card"><b>2. Questions</b> (one per line)<textarea id="qs"></textarea><p><button onclick="go()">Draft answers</button><button onclick="csv()">Download CSV</button></p></div>
-<div class="card" id="res" hidden><div id="sum"></div><div class="wrap"><table id="t"></table></div></div>
-<footer>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b><br>
-<a href="https://github.com/Nikhil-creat">GitHub</a> · <a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a">LinkedIn</a></footer>
-<script>
-const $=id=>document.getElementById(id);
-$('pol').value=`All customer data is encrypted at rest using AES-256 and in transit using TLS 1.2 or higher.
-
-Access to production systems requires single sign-on with multi-factor authentication. Access reviews are performed quarterly.
-
-Customer data is retained for the duration of the contract and deleted within 30 days of termination upon request.
-
-Employees complete security awareness training at onboarding and annually thereafter.
-
-Backups are taken daily and stored in a separate region. Restore tests are performed twice a year.`;
-$('qs').value=`Do you encrypt customer data at rest?
-Is multi-factor authentication required for production access?
-How long do you retain customer data after contract termination?
-How often are backups performed and tested?
-Describe your breach notification process.
-Do you operate a quantum datacenter on the moon?`;
-const STOP=new Set("the a an of to and or in on for is are do does you your we our with be by as at it this that".split(" "));
-const SENS=/breach|incident|certif|soc ?2 type|iso ?27001|legal|liabil|indemn|insurance/i;
-const tok=t=>(t.toLowerCase().match(/[a-z0-9\-]+/g)||[]).filter(w=>!STOP.has(w));
-function chunk(text,size=600){const o=[];let b="";for(const p of text.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean)){if(b&&b.length+p.length>size){o.push(b);b=p}else b=(b+"\n"+p).trim()}if(b)o.push(b);return o}
-function search(ch,q,k=3){const qt=new Set(tok(q)),n=ch.length+1,df={};ch.forEach(c=>new Set(c.toks).forEach(t=>df[t]=(df[t]||0)+1));
- return ch.map(c=>{const tf={};c.toks.forEach(t=>tf[t]=(tf[t]||0)+1);let s=0;qt.forEach(t=>{if(tf[t])s+=(1+Math.log(tf[t]))*Math.log(1+n/df[t])});return{...c,s}}).filter(c=>c.s>0).sort((a,b)=>b.s-a.s).slice(0,k)}
-function answer(ch,q){const h=search(ch,q);if(!h.length)return{q,a:"Insufficient evidence",c:"",v:"escalate",conf:0,why:"no supporting evidence"};
- const qt=new Set(tok(q)),sc=s=>tok(s).filter(t=>qt.has(t)).length;
- const a=h[0].text.split(/(?<=[.!?])\s+/).sort((x,y)=>sc(y)-sc(x)).slice(0,2).join(" ");
- const src=new Set(h[0].toks),at=tok(a),sup=at.length?Math.round(100*at.filter(t=>src.has(t)).length/at.length)/100:0;
- if(SENS.test(q))return{q,a,c:h[0].id,v:"escalate",conf:sup,why:"sensitive topic: security owner must approve"};
- return{q,a,c:h[0].id,v:sup>=.6?"pass":"escalate",conf:sup,why:sup>=.6?"supported by sources":"weak support"}}
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let rows=[];
-function go(){const ch=chunk($('pol').value).map((t,i)=>({id:"policy#"+(i+1),text:t,toks:tok(t)}));
- rows=$('qs').value.split("\n").map(s=>s.trim()).filter(Boolean).map(q=>answer(ch,q));
- const p=rows.filter(r=>r.v==="pass").length;$('res').hidden=false;$('sum').textContent=`${rows.length} questions: ${p} auto-passed, ${rows.length-p} need review`;
- $('t').innerHTML='<tr><th>Question</th><th>Answer</th><th>Status</th></tr>'+rows.map(r=>`<tr><td>${esc(r.q)}</td><td>${esc(r.a)}<br><small>${esc(r.c)}</small></td><td class="${r.v}">${r.v} (${r.conf})<br><small>${esc(r.why)}</small></td></tr>`).join('')}
-function csv(){const q=s=>'"'+String(s).replace(/"/g,'""')+'"';
- const t=["question,answer,citation,verdict,confidence"].concat(rows.map(r=>[r.q,r.a,r.c,r.v,r.conf].map(q).join(","))).join("\n");
- const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="answers.csv";a.click()}
-</script></body></html>
+<title>Questionnaire AI: Cited AI answers for security questionnaires</title><meta name="description" content="AI agents draft cited answers to customer security questionnaires from your own policies. Critic-checked, human-approved, XLSX in and out."><meta name="author" content="Nikhil Chary Sriramoju">
+<meta name="theme-color" content="#0b0e14"><link rel="canonical" href="https://nikhil-creat.github.io/questionnaire-ai/">
+<meta property="og:type" content="website"><meta property="og:title" content="Questionnaire AI: Cited AI answers for security questionnaires"><meta property="og:description" content="AI agents draft cited answers to customer security questionnaires from your own policies. Critic-checked, human-approved, XLSX in and out."><meta property="og:url" content="https://nikhil-creat.github.io/questionnaire-ai/">
+<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://nikhil-creat.github.io/questionnaire-ai/og.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236ea8fe'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Questionnaire AI", "url": "https://nikhil-creat.github.io/questionnaire-ai/", "founder": {"@type": "Person", "name": "Nikhil Chary Sriramoju", "sameAs": ["https://github.com/Nikhil-creat", "https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"]}, "email": "sriramojunikhil66@gmail.com"}</script></head><body><a class="skip" href="#main">Skip to content</a>
+<header class="hd"><div class="w"><a class="brand" href="index.html"><span class="logo"></span>Questionnaire AI</a>
+<nav id="nav" aria-label="Main"><a href="index.html#how">Product</a><a href="pricing.html">Pricing</a><a href="docs.html">Docs</a><a href="security.html">Security</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn" href="demo.html">Try the demo</a></nav>
+<button id="mb" aria-label="Menu" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#9776;</button></div></header><main id="main"><div class="hero w"><span class="pill">Early access &middot; built for B2B SaaS teams</span>
+<h1>Security questionnaires, answered in minutes, not days.</h1>
+<p>AI agents draft answers from your own policies and evidence. A critic checks every claim against its source. Your team approves, then exports to the original spreadsheet.</p>
+<div class="cta"><a class="btn" href="demo.html">Try the live demo</a><a class="btn o" href="contact.html">Get early access</a></div></div>
+<section id="how"><div class="w"><h2>How it works</h2><p class="sub">From a buyer's spreadsheet to a reviewed, export-ready answer set.</p><div class="grid">
+<div class="card"><h3><span class="num">1</span> Upload your policies</h3><p>Add PDFs, Word docs, or text. We split them into searchable, citable passages.</p></div>
+<div class="card"><h3><span class="num">2</span> Upload the questionnaire</h3><p>Drop in the buyer's XLSX. Questions are detected automatically.</p></div>
+<div class="card"><h3><span class="num">3</span> Agents draft and verify</h3><p>A drafter answers only from your evidence. A critic rejects anything unsupported.</p></div>
+<div class="card"><h3><span class="num">4</span> Review and export</h3><p>Approve or edit, then export answers with citations back into the original file.</p></div></div></div></section>
+<section class="band"><div class="w"><h2>Built so a wrong answer never ships</h2><p class="sub">Security answers are commitments. The product is designed around that.</p><div class="grid" style="text-align:left">
+<div class="card"><h3>Every answer is cited</h3><p>Each draft points to the exact passage it came from, or says "Insufficient evidence".</p></div>
+<div class="card"><h3>Critic and escalation</h3><p>Weak support, missing citations, and sensitive topics (breaches, certifications, legal) go to a human.</p></div>
+<div class="card"><h3>Human approval</h3><p>Nothing is final until a reviewer approves it. Approvals are logged.</p></div>
+<div class="card"><h3>Answer library</h3><p>Approved answers are reused for repeat questions, so each questionnaire gets faster.</p></div>
+<div class="card"><h3>Privacy by design</h3><p>Emails, phone numbers and IPs are masked before any language-model call.</p></div>
+<div class="card"><h3>Gap and freshness insights</h3><p>See which questions keep escalating and which policies are out of date.</p></div></div></div></section>
+<section><div class="w"><h2>Frequently asked questions</h2><p class="sub">Straight answers.</p>
+<details><summary>Will it make things up?</summary><p>It is built not to. Drafts must cite retrieved passages, and a critic blocks uncited or unsupported claims. When evidence is missing, the answer says so and a human decides.</p></details>
+<details><summary>Which formats do you support?</summary><p>Policies: PDF, DOCX, TXT, Markdown. Questionnaires: XLSX today. Portal and Word/PDF export are on the roadmap.</p></details>
+<details><summary>Where does my data go?</summary><p>The live demo runs entirely in your browser. The full product sends text to a language model only after masking personal data, and is designed for zero-retention provider settings. See the <a href="security.html">Security</a> page for what exists today and what is planned.</p></details>
+<details><summary>Are you SOC 2 certified?</summary><p>No. We are an early-stage company and will publish our certification status honestly as it changes.</p></details>
+<details><summary>How do I get started?</summary><p>Try the <a href="demo.html">live demo</a>, then <a href="contact.html">contact us</a> about an early-access pilot.</p></details></div></section>
+<section class="band"><div class="w"><h2>See it on your own questionnaire</h2><p class="sub">Send one redacted questionnaire and we will return cited drafts for you to judge.</p>
+<a class="btn" href="contact.html">Request a pilot</a></div></section></main><footer><div class="w"><div class="fg">
+<div><a class="brand" href="index.html" style="margin:0 0 8px"><span class="logo"></span>Questionnaire AI</a>
+<p style="color:var(--mut);font-size:14px;margin:0;max-width:300px">AI agents that draft cited answers to customer security questionnaires from your own policies.</p></div>
+<div><h4>Product</h4><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="docs.html">Documentation</a><a href="roi.html">ROI calculator</a><a href="demo.html">Live demo</a><a href="https://github.com/Nikhil-creat/questionnaire-ai">Source code</a></div>
+<div><h4>Company</h4><a href="about.html">About</a><a href="security.html">Security</a><a href="contact.html">Contact</a></div>
+<div><h4>Legal &amp; connect</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="https://github.com/Nikhil-creat" rel="noopener">GitHub</a><a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a" rel="noopener">LinkedIn</a></div></div>
+<div class="cr"><span>&copy; 2026 Questionnaire AI. All rights reserved.</span>
+<span>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b>, Founder</span></div></div></footer></body></html>

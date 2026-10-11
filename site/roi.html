@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ROI Calculator | Questionnaire AI</title><meta name="description" content="Estimate hours and money saved by automating security questionnaires."><meta name="author" content="Nikhil Chary Sriramoju">
+<meta name="theme-color" content="#0b0e14"><link rel="canonical" href="https://nikhil-creat.github.io/questionnaire-ai/roi.html">
+<meta property="og:type" content="website"><meta property="og:title" content="ROI Calculator | Questionnaire AI"><meta property="og:description" content="Estimate hours and money saved by automating security questionnaires."><meta property="og:url" content="https://nikhil-creat.github.io/questionnaire-ai/roi.html">
+<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://nikhil-creat.github.io/questionnaire-ai/og.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236ea8fe'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Questionnaire AI", "url": "https://nikhil-creat.github.io/questionnaire-ai/", "founder": {"@type": "Person", "name": "Nikhil Chary Sriramoju", "sameAs": ["https://github.com/Nikhil-creat", "https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"]}, "email": "sriramojunikhil66@gmail.com"}</script></head><body><a class="skip" href="#main">Skip to content</a>
+<header class="hd"><div class="w"><a class="brand" href="index.html"><span class="logo"></span>Questionnaire AI</a>
+<nav id="nav" aria-label="Main"><a href="index.html#how">Product</a><a href="pricing.html">Pricing</a><a href="docs.html">Docs</a><a href="security.html">Security</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn" href="demo.html">Try the demo</a></nav>
+<button id="mb" aria-label="Menu" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#9776;</button></div></header><main id="main"><div class="w page"><h1>ROI calculator</h1>
+<p>A rough estimate. Change the numbers to match your team. The default time saved is an assumption to test in a pilot, not a guarantee.</p>
+<div class="grid" style="margin-top:16px"><div class="card"><label for="n">Questionnaires per month</label><input id="n" type="number" value="10" min="0">
+<label for="h">Hours per questionnaire today</label><input id="h" type="number" value="8" min="0">
+<label for="r">Loaded cost per hour (USD)</label><input id="r" type="number" value="60" min="0">
+<label for="p">Time saved by automation (%)</label><input id="p" type="number" value="60" min="0" max="100"></div>
+<div class="card"><h3>Estimated savings</h3><p id="o" class="big"></p><p style="margin-top:12px">Compare with the Growth plan at $499/month on the <a href="pricing.html">pricing page</a>.</p><p style="margin-top:12px"><a class="btn" href="contact.html">Request a pilot</a></p></div></div>
+<script>var $=function(i){return document.getElementById(i)};function calc(){var n=+$('n').value,h=+$('h').value,r=+$('r').value,p=+$('p').value/100,s=n*h*p;
+$('o').innerHTML='<b>'+s.toFixed(0)+'</b> hours saved / month<br><b>$'+(s*r).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'</b> estimated value / month'}
+document.querySelectorAll('input').forEach(function(e){e.oninput=calc});calc()</script></div></main><footer><div class="w"><div class="fg">
+<div><a class="brand" href="index.html" style="margin:0 0 8px"><span class="logo"></span>Questionnaire AI</a>
+<p style="color:var(--mut);font-size:14px;margin:0;max-width:300px">AI agents that draft cited answers to customer security questionnaires from your own policies.</p></div>
+<div><h4>Product</h4><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="docs.html">Documentation</a><a href="roi.html">ROI calculator</a><a href="demo.html">Live demo</a><a href="https://github.com/Nikhil-creat/questionnaire-ai">Source code</a></div>
+<div><h4>Company</h4><a href="about.html">About</a><a href="security.html">Security</a><a href="contact.html">Contact</a></div>
+<div><h4>Legal &amp; connect</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="https://github.com/Nikhil-creat" rel="noopener">GitHub</a><a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a" rel="noopener">LinkedIn</a></div></div>
+<div class="cr"><span>&copy; 2026 Questionnaire AI. All rights reserved.</span>
+<span>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b>, Founder</span></div></div></footer></body></html>

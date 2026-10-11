@@ -7,7 +7,7 @@ answers export back into the original XLSX.
 > **Designed and developed by NIKHIL CHARY SRIRAMOJU**
 > [GitHub](https://github.com/Nikhil-creat) · [LinkedIn](https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a)
 
-**Live demo:** https://nikhil-creat.github.io/questionnaire-ai/ (runs in your browser)
+**Website:** https://nikhil-creat.github.io/questionnaire-ai/ · **Live demo:** https://nikhil-creat.github.io/questionnaire-ai/demo.html
 
 ## Quickstart
 ```bash
@@ -26,6 +26,8 @@ Set `ANTHROPIC_API_KEY` in `.env` for LLM drafting. Without it, the app runs off
 - Answer library: approved answers are reused for repeat questions
 - PII masking before any LLM call, audit log, stale-policy warnings, gap analysis
 - Golden-set eval in CI, in-browser demo for GitHub Pages
+- Company website: pricing, docs, security, about, contact form, ROI calculator, legal pages
+- Optional `API_KEY` auth and per-client rate limiting
 - API extras: `/api/audit`, `/api/stale-documents`, `/api/questionnaires/{id}/gaps`
 
 ## How it works
@@ -41,7 +43,7 @@ Set `ANTHROPIC_API_KEY` in `.env` for LLM drafting. Without it, the app runs off
 | `apps/api/static/index.html` | Single-page review UI |
 | `apps/api/agents/graph.py` | LangGraph skeleton (production path) |
 | `apps/api/db/schema.sql` | Postgres + pgvector schema with row-level security (production path) |
-| `site/` | Static live demo (GitHub Pages) |
+| `site/` | Company website + live demo (GitHub Pages); regenerate with `python tools/build_site.py` |
 | `eval/` | Golden-set evaluation |
 | `docs/ROADMAP.md` | Advanced feature guide |
 | `docs/DEPLOY_GITHUB_PAGES.md` | Pages deployment guide |

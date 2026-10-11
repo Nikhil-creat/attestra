@@ -1,7 +1,8 @@
 """Questionnaire AI - API. Designed and developed by NIKHIL CHARY SRIRAMOJU."""
-import io, uuid
+import io, os, time, uuid, hmac, collections
 from fastapi import FastAPI, UploadFile, File, Header, HTTPException
-from fastapi.responses import Response
+from fastapi.responses import Response, JSONResponse
+from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from pypdf import PdfReader
 from docx import Document as Docx
@@ -12,6 +13,23 @@ AUTHOR = {"name": "NIKHIL CHARY SRIRAMOJU", "github": "https://github.com/Nikhil
           "linkedin": "https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"}
 app = FastAPI(title="Questionnaire AI", version="1.0.0",
               description="Cited AI answers for security questionnaires. Designed and developed by NIKHIL CHARY SRIRAMOJU.")
+HITS = collections.defaultdict(list)
+
+
+@app.middleware("http")
+async def guard(request: Request, call_next):
+    if request.url.path.startswith("/api"):
+        key = os.getenv("API_KEY")
+        if key and not hmac.compare_digest(request.headers.get("x-api-key", ""), key):
+            return JSONResponse({"detail": "invalid API key"}, status_code=401)
+        who, now, lim = request.client.host if request.client else "?", time.time(), int(os.getenv("RATE_LIMIT", "60"))
+        HITS[who] = [t for t in HITS[who] if now - t < 60]
+        if len(HITS[who]) >= lim:
+            return JSONResponse({"detail": "rate limit exceeded"}, status_code=429)
+        HITS[who].append(now)
+    return await call_next(request)
+
+
 STORE = {}  # tenant -> {"index": Index, "runs": {id: {...}}}  (swap for Postgres, see schema.sql)
 MAX_BYTES = 10 * 1024 * 1024
 

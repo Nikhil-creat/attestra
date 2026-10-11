@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Documentation | Questionnaire AI</title><meta name="description" content="Quickstart, API reference and configuration for Questionnaire AI."><meta name="author" content="Nikhil Chary Sriramoju">
+<meta name="theme-color" content="#0b0e14"><link rel="canonical" href="https://nikhil-creat.github.io/questionnaire-ai/docs.html">
+<meta property="og:type" content="website"><meta property="og:title" content="Documentation | Questionnaire AI"><meta property="og:description" content="Quickstart, API reference and configuration for Questionnaire AI."><meta property="og:url" content="https://nikhil-creat.github.io/questionnaire-ai/docs.html">
+<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://nikhil-creat.github.io/questionnaire-ai/og.png"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236ea8fe'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Questionnaire AI", "url": "https://nikhil-creat.github.io/questionnaire-ai/", "founder": {"@type": "Person", "name": "Nikhil Chary Sriramoju", "sameAs": ["https://github.com/Nikhil-creat", "https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"]}, "email": "sriramojunikhil66@gmail.com"}</script></head><body><a class="skip" href="#main">Skip to content</a>
+<header class="hd"><div class="w"><a class="brand" href="index.html"><span class="logo"></span>Questionnaire AI</a>
+<nav id="nav" aria-label="Main"><a href="index.html#how">Product</a><a href="pricing.html">Pricing</a><a href="docs.html" aria-current="page">Docs</a><a href="security.html">Security</a><a href="about.html">About</a><a href="contact.html">Contact</a><a class="btn" href="demo.html">Try the demo</a></nav>
+<button id="mb" aria-label="Menu" aria-expanded="false" onclick="var n=document.getElementById('nav');var o=n.classList.toggle('open');this.setAttribute('aria-expanded',o)">&#9776;</button></div></header><main id="main"><div class="w page"><h1>Documentation</h1>
+<p>Run the API locally, upload policies, process a questionnaire, and export answers.</p>
+<h2>Quickstart</h2><pre><code>git clone https://github.com/Nikhil-creat/questionnaire-ai.git
+cd questionnaire-ai/apps/api
+pip install -r requirements.txt
+uvicorn main:app --reload     # http://localhost:8000</code></pre>
+<h2>Example</h2><pre><code>curl -F file=@policy.md http://localhost:8000/api/documents
+curl -F file=@questionnaire.xlsx http://localhost:8000/api/questionnaires
+curl -OJ http://localhost:8000/api/questionnaires/&lt;id&gt;/export</code></pre>
+<h2>API reference</h2><div class="tbl"><table><tr><th>Method and path</th><th>Purpose</th></tr>
+<tr><td><code>POST /api/documents</code></td><td>Upload a policy (pdf, docx, txt, md)</td></tr>
+<tr><td><code>POST /api/questionnaires</code></td><td>Upload XLSX; returns drafted, cited answers</td></tr>
+<tr><td><code>GET /api/questionnaires/{id}</code></td><td>Fetch a run</td></tr>
+<tr><td><code>POST /api/questionnaires/{id}/items/{n}/approve</code></td><td>Approve (optionally edit) an answer; adds it to the library</td></tr>
+<tr><td><code>GET /api/questionnaires/{id}/export</code></td><td>Download the answered XLSX</td></tr>
+<tr><td><code>GET /api/questionnaires/{id}/gaps</code></td><td>Why answers were escalated</td></tr>
+<tr><td><code>GET /api/stale-documents</code></td><td>Policies past their review date</td></tr>
+<tr><td><code>GET /api/audit</code></td><td>Audit log</td></tr><tr><td><code>GET /health</code></td><td>Health check</td></tr></table></div>
+<h2>Configuration</h2><div class="tbl"><table><tr><th>Variable</th><th>Meaning</th></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>Enables LLM drafting. Without it, offline extractive mode is used.</td></tr>
+<tr><td><code>ANTHROPIC_MODEL</code></td><td>Model name for drafting</td></tr>
+<tr><td><code>API_KEY</code></td><td>If set, every <code>/api</code> request must send <code>X-API-Key</code></td></tr>
+<tr><td><code>RATE_LIMIT</code></td><td>Max <code>/api</code> requests per minute per client (default 60)</td></tr></table></div>
+<p>Send <code>X-Tenant</code> to separate workspaces in the demo build. Production tenancy will come from authenticated tokens.</p>
+<h2>Limits</h2><p>The current build stores data in memory and is for evaluation. See the <a href="security.html">Security</a> page.</p></div></main><footer><div class="w"><div class="fg">
+<div><a class="brand" href="index.html" style="margin:0 0 8px"><span class="logo"></span>Questionnaire AI</a>
+<p style="color:var(--mut);font-size:14px;margin:0;max-width:300px">AI agents that draft cited answers to customer security questionnaires from your own policies.</p></div>
+<div><h4>Product</h4><a href="index.html#how">How it works</a><a href="pricing.html">Pricing</a><a href="docs.html">Documentation</a><a href="roi.html">ROI calculator</a><a href="demo.html">Live demo</a><a href="https://github.com/Nikhil-creat/questionnaire-ai">Source code</a></div>
+<div><h4>Company</h4><a href="about.html">About</a><a href="security.html">Security</a><a href="contact.html">Contact</a></div>
+<div><h4>Legal &amp; connect</h4><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a><a href="https://github.com/Nikhil-creat" rel="noopener">GitHub</a><a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a" rel="noopener">LinkedIn</a></div></div>
+<div class="cr"><span>&copy; 2026 Questionnaire AI. All rights reserved.</span>
+<span>Designed and developed by <b>NIKHIL CHARY SRIRAMOJU</b>, Founder</span></div></div></footer></body></html>
